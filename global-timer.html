@@ -44,11 +44,7 @@ Example:
     </style>
 
     <h1><strong>{{days}}</strong> {{daysTxt.output}}
-
-      <template is="dom-if" if="{{_displayHours(hours)}}">
-        {{hours}}</strong> {{hoursTxt.output}}
-      </template>
-
+      <strong>{{hours}}</strong> {{hoursTxt.output}}
     </h1>
     <content></content>
 
@@ -119,7 +115,7 @@ Example:
       this.minutes = this.eventDate.diff(today, 'minutes') - this.eventDate.diff(today, 'hours') * 60;
 
       // Set the Interval
-      this.set('interval', setInterval(this.timerStarted.bind(this), 500));
+      this.set('interval', setInterval(this.timerStarted.bind(this), 750));
     },
 
     attached: function() {
@@ -154,7 +150,6 @@ Example:
      */
     timerStarted: function() {
         var now = moment().format();
-        console.log('timerStarted');
 
         this.days  = this.eventDate.diff(now, 'days');
         this.hours = this.eventDate.diff(now, 'hours') % 24;
@@ -169,7 +164,7 @@ Example:
      */
     timeUpdated: function() {
       if(this.hoursTxt !== undefined) {
-        this.hoursTxt.output = this.hours <= 1 ? this.hoursTxt.singular : this.hoursTxt.plural;
+        this.hoursTxt.output = this.hours === 1 ? this.hoursTxt.singular : this.hoursTxt.plural;
         this.set('hoursTxt.output', this.hoursTxt.output);
       }
 
@@ -180,12 +175,6 @@ Example:
       }
 
     },
-
-    _displayHours: function() {
-
-      return (this.hours === 0) ? false : true;
-
-    }
 
 
   });
