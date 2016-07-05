@@ -1,0 +1,193 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="import-moment.html">
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <global-timer></global-timer>
+
+@group Seed Elements
+@element global-timer
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="global-timer">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+
+      }
+
+      h1{
+        font-size: 120px;
+        text-transform: uppercase;
+        @apply(--global-timer-styles);
+
+      }
+      strong {
+        @apply(--global-timer-strong-styles);
+      }
+    </style>
+
+    <h1><strong>{{days}}</strong> {{daysTxt.output}}
+
+      <template is="dom-if" if="{{_displayHours(hours)}}">
+        {{hours}}</strong> {{hoursTxt.output}}
+      </template>
+
+    </h1>
+    <content></content>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'global-timer',
+
+    properties: {
+
+      /**
+       * `timezone` not UTC specific Moment.js data. Example America/Los_Angeles
+       */
+      timezone: {
+        type: String,
+        value: function() { return 'America/Los_Angeles'; }
+      },
+
+      /**
+       * `eventDate` Event Date Format 'YYYY-MM-DD 10:23'
+       */
+      eventDate: String,
+
+      days: {
+        type: Number,
+        observer: 'timeUpdated'
+      },
+
+      hours: {
+        type: Number,
+        observer: 'timeUpdated'
+      },
+
+      daysTxt: {
+        type: Object,
+        value: function() {
+          return { singular: 'Day', plural: 'Days' };
+        }
+      },
+      hoursTxt: {
+        type: Object,
+        value: function() {
+          return { singular: 'Hour', plural: 'Hours' };
+        }
+      }
+
+    },
+
+
+
+    // Element Lifecycle
+
+    ready: function() {
+
+      moment.tz.setDefault(this.timezone);
+      this.eventDate = moment.tz(this.eventDate, this.timezone);
+
+      var today = moment().format();
+
+      this.days  = this.eventDate.diff(today, 'days');
+      this.hours = this.eventDate.diff(today, 'hours') % 24;
+
+      this.minutes = this.eventDate.diff(today, 'minutes') - this.eventDate.diff(today, 'hours') * 60;
+
+      // Set the Interval
+      this.set('interval', setInterval(this.timerStarted.bind(this), 500));
+    },
+
+    attached: function() {
+      // `attached` fires once the element and its parents have been inserted
+      // into a document.
+      //
+      // This is a good place to perform any work related to your element's
+      // visual state or active behavior (measuring sizes, beginning animations,
+      // loading resources, etc).
+    },
+
+    detached: function() {
+      // The analog to `attached`, `detached` fires when the element has been
+      // removed from a document.
+      //
+      // Use this to clean up anything you did in `attached`.
+      clearInterval(this.get('interval'));
+    },
+
+    // Element Behavior
+
+    /**
+     * The `global-timer-lasers` event is fired whenever `fireLasers` is called.
+     *
+     * @event global-timer-lasers
+     * @detail {{sound: String}}
+     */
+
+    /**
+     * Starting timer for those few cases that roll over the hour
+     *
+     */
+    timerStarted: function() {
+        var now = moment().format();
+        console.log('timerStarted');
+
+        this.days  = this.eventDate.diff(now, 'days');
+        this.hours = this.eventDate.diff(now, 'hours') % 24;
+        this.minutes = this.eventDate.diff(now, 'minutes') - this.eventDate.diff(now, 'hours') * 60;
+
+
+    },
+
+    /**
+     * Observer for timer to display plural or singular verbage
+     *
+     */
+    timeUpdated: function() {
+      if(this.hoursTxt !== undefined) {
+        this.hoursTxt.output = this.hours <= 1 ? this.hoursTxt.singular : this.hoursTxt.plural;
+        this.set('hoursTxt.output', this.hoursTxt.output);
+      }
+
+      if(this.daysTxt !== undefined) {
+        this.daysTxt.output = this.days <= 1 ? this.daysTxt.singular : this.daysTxt.plural;
+        this.set('daysTxt.output', this.daysTxt.output);
+
+      }
+
+    },
+
+    _displayHours: function() {
+
+      return (this.hours === 0) ? false : true;
+
+    }
+
+
+  });
+
+</script>
