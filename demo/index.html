@@ -15,7 +15,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <title>global-timer Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="../global-timer.html">
-    
+    <style is="custom-style">
+      global-timer {
+        --global-timer-days-styles: {
+            color: red;
+        };
+        --global-timer-hours-styles: {
+            color: blue;
+        };
+      }
+    </style>
   </head>
   <body unresolved>
 

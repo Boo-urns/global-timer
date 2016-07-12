@@ -41,10 +41,16 @@ Example:
       strong {
         @apply(--global-timer-strong-styles);
       }
+      .days {
+        @apply(--global-timer-days-styles);
+      }
+      .hours {
+        @apply(--global-timer-hours-styles);
+      }
     </style>
 
-    <h1><strong>{{days}}</strong> {{daysTxt.output}}
-      <strong>{{hours}}</strong> {{hoursTxt.output}}
+    <h1><span class="days"><strong>{{days}}</strong> {{daysTxt.output}}</span>
+      <span class="hours"><strong>{{hours}}</strong> {{hoursTxt.output}}</span>
     </h1>
     <content></content>
 
