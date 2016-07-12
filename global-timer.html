@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../polymer/polymer.html">
 
+<link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="import-moment.html">
 <!--
 An element providing a solution to no problem in particular.
@@ -47,9 +48,13 @@ Example:
       .hours {
         @apply(--global-timer-hours-styles);
       }
+      h1[narrow-layout] .hours {
+        display: none;
+      }
     </style>
+    <iron-media-query query="(max-width: 600px)" query-matches="{{narrow}}"></iron-media-query>
 
-    <h1><span class="days"><strong>{{days}}</strong> {{daysTxt.output}}</span>
+    <h1 narrow-layout$="{{narrow}}"><span class="days"><strong>{{days}}</strong> {{daysTxt.output}}</span>
       <span class="hours"><strong>{{hours}}</strong> {{hoursTxt.output}}</span>
     </h1>
     <content></content>

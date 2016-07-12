@@ -19,7 +19,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.1.0",
-    "moment-timezone": "^0.5.4"
+    "moment-timezone": "^0.5.4",
+    "iron-media-query": "PolymerElements/iron-media-query#^1.0.8"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
